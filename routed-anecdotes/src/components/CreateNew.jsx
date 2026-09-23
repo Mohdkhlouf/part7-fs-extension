@@ -28,7 +28,9 @@ const CreateNew = ({ addNew }) => {
     author.reset()
     info.reset()
   }
-
+  const { reset: resetContent, ...contentInput } = content
+  const { reset: resetAuthor, ...authorInput } = author
+  const { reset: resetInfo, ...infoInput} = info
 
   return (
     <div>
@@ -36,15 +38,15 @@ const CreateNew = ({ addNew }) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...contentInput} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...authorInput} />
         </div>
         <div>
           url for more info
-          <input {...info}/>
+          <input {...infoInput}/>
         </div>
         <button>create</button>
         <button type = "reset" onClick={handleReset}>reset</button>
