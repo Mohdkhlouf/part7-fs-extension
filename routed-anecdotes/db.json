@@ -27,6 +27,62 @@
       "info": "test3",
       "votes": 0,
       "id": "qQNWgBz8CLQ"
+    },
+    {
+      "content": "an anecdote created by playwright 1790176528412",
+      "author": "Playwright",
+      "info": "https://playwright.dev",
+      "votes": 0,
+      "id": "L15en-dVr2A"
+    },
+    {
+      "content": "an anecdote created by playwright 1790176553519",
+      "author": "Playwright",
+      "info": "https://playwright.dev",
+      "votes": 0,
+      "id": "eNJThZodXro"
+    },
+    {
+      "content": "an anecdote created by playwright 1790176585997",
+      "author": "Playwright",
+      "info": "https://playwright.dev",
+      "votes": 0,
+      "id": "ucDWOWpl4tM"
+    },
+    {
+      "content": "an anecdote created by playwright 1790176676832",
+      "author": "Playwright",
+      "info": "https://playwright.dev",
+      "votes": 0,
+      "id": "zW-_KwAqtQY"
+    },
+    {
+      "content": "an anecdote created by playwright 1790177054526",
+      "author": "Playwright",
+      "info": "https://playwright.dev",
+      "votes": 0,
+      "id": "JQ1tmxqQ740"
+    },
+    {
+      "content": "an anecdote created by playwright 1790177712053",
+      "author": "Playwright",
+      "info": "https://playwright.dev",
+      "votes": 0,
+      "id": "h_yxExbroGg"
+    },
+    {
+      "content": "an anecdote created by playwright 1790177745855",
+      "author": "Playwright",
+      "info": "https://playwright.dev",
+      "votes": 0,
+      "id": "KIbNHH1JIWY"
+    },
+    {
+      "content": "an anecdote created by playwright 1790178048915",
+      "author": "Playwright",
+      "info": "https://playwright.dev",
+      "votes": 0,
+      "id": "3QwYOxF-2Ns"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

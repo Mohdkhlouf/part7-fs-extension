@@ -10,14 +10,25 @@ import { useAnecdotes } from './hooks/useAnecdotes'
 const App = () => {
   const { anecdotes, addAnecdote, deleteAnecdote } = useAnecdotes()
 
+  const addNew = async (anecdote) => {
+    await addAnecdote(anecdote)
+  }
+
+  const removeAnecdote = async (id) => {
+    await deleteAnecdote(id)
+  }
+
   return (
     <Router>
       <div>
         <h1>Software anecdotes</h1>
         <Menu />
         <Routes>
-          <Route path="/" element={<AnecdoteList anecdotes={anecdotes} deleteAnecdote={ deleteAnecdote} />} />
-          <Route path="/create" element={<CreateNew addNew={addAnecdote} />} />
+          <Route
+            path="/"
+            element={<AnecdoteList anecdotes={anecdotes} deleteAnecdote={removeAnecdote} />}
+          />
+          <Route path="/create" element={<CreateNew addNew={addNew} />} />
           <Route path="/about" element={<About />} />
         </Routes>
         <Footer />

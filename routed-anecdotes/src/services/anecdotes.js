@@ -24,7 +24,7 @@ const createNew = async (object) => {
   return await response.json()
 }
 
-const deleteAnecdote = async (id) => {
+const remove = async (id) => {
   const options = {
     method: 'DELETE',
     header: { 'Content-Type': 'applocation/json' },
@@ -36,4 +36,4 @@ const deleteAnecdote = async (id) => {
   return await response.json()
 }
 
-export default { getAll, createNew,deleteAnecdote }
+export default { getAll, createNew, remove }
