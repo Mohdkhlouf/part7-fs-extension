@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "server:test": "json-server --port 3001 db.json"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0"
