@@ -16,9 +16,18 @@ const CreateNew = ({ addNew }) => {
       info: info.value,
       votes: 0
     })
+    content.reset()
+    author.reset()
+    info.reset()
+
     navigate("/")
   }
 
+  const handleReset = () => {
+    content.reset()
+    author.reset()
+    info.reset()
+  }
 
 
   return (
@@ -38,7 +47,9 @@ const CreateNew = ({ addNew }) => {
           <input {...info}/>
         </div>
         <button>create</button>
+        <button type = "reset" onClick={handleReset}>reset</button>
       </form>
+
     </div>
   )
 }
