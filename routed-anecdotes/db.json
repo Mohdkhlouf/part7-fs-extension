@@ -27,13 +27,6 @@
       "info": "test3",
       "votes": 0,
       "id": "qQNWgBz8CLQ"
-    },
-    {
-      "content": "wwee",
-      "author": "wwee",
-      "info": "wwee",
-      "votes": 0,
-      "id": "8Ji5MtFcIIo"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

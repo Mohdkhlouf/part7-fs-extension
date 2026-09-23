@@ -13,12 +13,28 @@ export const useAnecdotes = () => {
     },[]   )
 
   const addAnecdote = async (anecdote) => {
-    const addedAnecdote = await anecdotesService.createNew(anecdote)
-    setAnecdotes(anecdotes.concat(addedAnecdote))
+    try {
+      const addedAnecdote = await anecdotesService.createNew(anecdote)
+      setAnecdotes(anecdotes.concat(addedAnecdote))
+    } catch (e) {
+      console.log('failed to delete anecdote',e)
+    }
   }
+
+  const deleteAnecdote = async (id) => {
+    try {
+      await anecdotesService.deleteAnecdote(id)
+      const filteredAnecdotes = anecdotes.filter((anecdote) => anecdote.id != id)
+      setAnecdotes(filteredAnecdotes)
+    } catch (e) {
+      console.log('failed to delete anecdote',e)
+    }
+  }
+
 
   return {
     anecdotes,
-    addAnecdote
+    addAnecdote,
+    deleteAnecdote
   }
 }
