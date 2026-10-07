@@ -173,6 +173,7 @@ const App = () => {
             <Route path="/" element={blogsFrom()} />
             <Route path="/login" element={loginForm()} />
             {user ? <Route path="/newblog" element={<BlogFrom createBlog={createNewBlog} />} /> : null}
+            <Route path="*" element={<div><h2>404 - Page not found</h2></div>} />
           </Routes>
         </ErrorBoundary>
       </div>
