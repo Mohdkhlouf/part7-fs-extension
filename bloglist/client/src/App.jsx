@@ -7,6 +7,7 @@ import BlogFrom from './components/BlogForm'
 import Header from './components/Header'
 import { Container } from '@mui/material'
 import { TextField, Button, Alert } from '@mui/material'
+import ErrorBoundary from './components/ErrorBoundary'
 
 
 
@@ -164,15 +165,16 @@ const App = () => {
         </div>
 
         {notification && <Alert style={{ marginTop: 10, marginBottom: 10 }} severity={notification.type}>{notification}</Alert>}
+        <ErrorBoundary>
+          <Routes>
+            <Route path='/blogs/:id' element={<Blog blog={blog} onDelete={handleDelete} onLike={handleLike} user={user}/>
+            }/>
 
-        <Routes>
-          <Route path='/blogs/:id' element={<Blog blog={blog} onDelete={handleDelete} onLike={handleLike} user={user}/>
-          }/>
-
-          <Route path="/" element={blogsFrom()} />
-          <Route path="/login" element={loginForm()} />
-          {user ? <Route path="/newblog" element={<BlogFrom createBlog={createNewBlog} />} /> : null}
-        </Routes>
+            <Route path="/" element={blogsFrom()} />
+            <Route path="/login" element={loginForm()} />
+            {user ? <Route path="/newblog" element={<BlogFrom createBlog={createNewBlog} />} /> : null}
+          </Routes>
+        </ErrorBoundary>
       </div>
     </Container>
   )
