@@ -17,7 +17,9 @@ describe('<Blog />', () => {
   }
 
   test('blog info and likes are shown to unauthenticated users, no buttons shown', () => {
-    render(<Blog blog={blog} user={null} onLike={() => {}} onDelete={() => {}} />)
+    render(
+      <Blog blog={blog} user={null} onLike={() => {}} onDelete={() => {}} />
+    )
 
     expect(screen.getByText(blog.title, { exact: false })).toBeInTheDocument()
     expect(screen.getByText(blog.author, { exact: false })).toBeInTheDocument()
@@ -30,7 +32,14 @@ describe('<Blog />', () => {
   test('logged-in non-creator sees only the like button', () => {
     const loggedInUser = { username: 'someoneelse', name: 'Someone Else' }
 
-    render(<Blog blog={blog} user={loggedInUser} onLike={() => {}} onDelete={() => {}} />)
+    render(
+      <Blog
+        blog={blog}
+        user={loggedInUser}
+        onLike={() => {}}
+        onDelete={() => {}}
+      />
+    )
 
     expect(screen.getByText('like')).toBeInTheDocument()
     expect(screen.queryByText('Remove')).not.toBeInTheDocument()
@@ -44,7 +53,9 @@ describe('<Blog />', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true)
     blogService.deleteBlog.mockResolvedValue({})
 
-    render(<Blog blog={blog} user={creator} onLike={() => {}} onDelete={onDelete} />)
+    render(
+      <Blog blog={blog} user={creator} onLike={() => {}} onDelete={onDelete} />
+    )
 
     await user.click(screen.getByText('Remove'))
 
@@ -56,7 +67,14 @@ describe('<Blog />', () => {
     const mockHandler = vi.fn()
     const user = userEvent.setup()
 
-    render(<Blog blog={blog} user={loggedInUser} onLike={mockHandler} onDelete={() => {}} />)
+    render(
+      <Blog
+        blog={blog}
+        user={loggedInUser}
+        onLike={mockHandler}
+        onDelete={() => {}}
+      />
+    )
 
     const button = screen.getByText('like')
     await user.click(button)

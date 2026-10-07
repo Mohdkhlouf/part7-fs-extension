@@ -10,9 +10,8 @@ const blogStyle = {
   paddingTop: 10,
   paddingLeft: 2,
 
-  marginBottom: 5,
+  marginBottom: 5
 }
-
 
 const Blog = ({ blog, onDelete, onLike, user }) => {
   if (!blog) return null
@@ -32,7 +31,6 @@ const Blog = ({ blog, onDelete, onLike, user }) => {
   }
 
   return (
-
     <div className="blog" style={blogStyle} data-testid="blog">
       <Card elevation={4}>
         <CardContent>
@@ -40,28 +38,38 @@ const Blog = ({ blog, onDelete, onLike, user }) => {
             {blog.title}
           </Typography>
 
-          <Typography variant="body2">
-            by {blog.author}
-          </Typography>
-          <Typography variant="body2">
-            {blog.url}
-          </Typography>
+          <Typography variant="body2">by {blog.author}</Typography>
+          <Typography variant="body2">{blog.url}</Typography>
 
           <Typography gutterBottom variant="body2">
-            {'Added by '}{blog.user.username}
+            {'Added by '}
+            {blog.user.username}
           </Typography>
 
           <Typography variant="body2">
             <span>{blog.likes} likes </span>
-            {user ? <Button variant="outlined" size="small" onClick={() => onLike(blog)}>Like</Button> : null}
+            {user ? (
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => onLike(blog)}
+              >
+                Like
+              </Button>
+            ) : null}
             {showRemoveButton && (
-              <Button variant="outlined" color="error" size="small" onClick={handleRemove}>Remove</Button>
+              <Button
+                variant="outlined"
+                color="error"
+                size="small"
+                onClick={handleRemove}
+              >
+                Remove
+              </Button>
             )}
           </Typography>
-
         </CardContent>
       </Card>
-
     </div>
   )
 }
