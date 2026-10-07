@@ -1,0 +1,24 @@
+meta {
+  name: add new blog
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3001/api/blogs
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1vaGFtbWFkNCIsImlkIjoiNjk2NjBmNzQxMjNmYTE1YjBjNDE1NzcxIiwiaWF0IjoxNzY4Mjk2MzUzfQ.-UCMKsYvsWqF6d0fm86kznG69kaYYnmqJqZ_D4FjN5U
+}
+
+body:json {
+  {
+    "title": "flast blog",
+    "author": "mohammad",
+    "url": "first_blog",
+    "likes": 0,
+  }
+}

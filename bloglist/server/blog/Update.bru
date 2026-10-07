@@ -1,0 +1,17 @@
+meta {
+  name: Update
+  type: http
+  seq: 1
+}
+
+put {
+  url: http://localhost:3001/api/blogs/69578e04ca178114a84afe29
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "likes":10
+  }
+}
