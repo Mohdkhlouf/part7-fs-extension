@@ -1,14 +1,11 @@
 import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 
-
 const blogStyle = {
   paddingTop: 10,
   paddingLeft: 2,
-
   marginBottom: 5
 }
 
@@ -18,13 +15,9 @@ const Blog = ({ blog, onDelete, onLike, user }) => {
   const showRemoveButton =
     user && blog.user && user.username === blog.user.username
 
-  const handleRemove = async () => {
-    try {
-      if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-        onDelete(blog.id)
-      }
-    } catch (error) {
-      console.error('Error deleteing blog', error)
+  const handleRemove = () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      onDelete(blog.id)
     }
   }
 
@@ -41,7 +34,7 @@ const Blog = ({ blog, onDelete, onLike, user }) => {
 
           <Typography gutterBottom variant="body2">
             {'Added by '}
-            {blog.user.username}
+            {blog.user?.username}
           </Typography>
 
           <Typography variant="body2">

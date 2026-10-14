@@ -1,23 +1,21 @@
-import { useState, useEffect, useReducer } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, useNavigate, useMatch, Link } from 'react-router-dom'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogFrom from './components/BlogForm'
 import Header from './components/Header'
-import { Container } from '@mui/material'
-import { TextField, Button, Alert } from '@mui/material'
+import Notification from './components/Notification'
+import { Container, TextField, Button } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
-import  notificationReducer  from './components/notificationContext'
-
-
+import { useNotify } from './NotificationContext'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, dispatch] = useReducer(notificationReducer, null)
+  const notify = useNotify()
   const navigate = useNavigate()
   const match = useMatch('/blogs/:id')
 
@@ -34,11 +32,6 @@ const App = () => {
     }
   }, [])
 
-  const notify = (message,type = 'success') => {
-    dispatch({type:'SET', payload:{message, type}})
-    setTimeout(() => { dispatch({ type: 'CLEAR', payload: null })
-    }, 5000)
-  }
   const handleLogin = async event => {
     event.preventDefault()
     try {
@@ -49,7 +42,7 @@ const App = () => {
       setUsername('')
       setPassword('')
       navigate('/')
-      notify(`new welcome back ${user.name}`)
+      notify(`welcome back ${user.name}`)
     } catch (exception) {
       notify(exception.response?.data?.error || exception.message, 'error')
     }
@@ -66,7 +59,7 @@ const App = () => {
       <h2>Login From:</h2>
       <div>
         <TextField
-          id="standard-basic"
+          id="username"
           label="username:"
           variant="standard"
           value={username}
@@ -76,7 +69,8 @@ const App = () => {
 
       <div>
         <TextField
-          id="standard-basic"
+          id="password"
+          type="password"
           label="password:"
           variant="standard"
           value={password}
@@ -85,8 +79,7 @@ const App = () => {
       </div>
       <div>
         <Button type="submit" variant="contained" style={{ marginTop: 10 }}>
-          {' '}
-          Login{' '}
+          Login
         </Button>
       </div>
     </form>
@@ -104,17 +97,13 @@ const App = () => {
   }
 
   const handleDelete = async blogId => {
-    console.log('handleDelete called with', blogId)
     const blogToDelete = blogs.find(b => b.id === blogId)
-    console.log('found', blogToDelete)
     try {
       await blogService.deleteBlog(blogId)
-      console.log('deleted on server')
       setBlogs(blogs.filter(b => b.id !== blogId))
       notify(`blog ${blogToDelete.title} by ${blogToDelete.author} deleted`)
       navigate('/')
     } catch (exception) {
-      console.log('error', exception)
       notify(exception.response?.data?.error || exception.message, 'error')
     }
   }
@@ -126,9 +115,9 @@ const App = () => {
         blogToLike.likes
       )
       setBlogs(blogs.map(b => (b.id === blogToLike.id ? updatedBlog : b)))
-      navigate('/')
-    } catch (error) {
-      console.error('Error updating likes:', error)
+      notify(`you liked ${updatedBlog.title}`)
+    } catch (exception) {
+      notify(exception.response?.data?.error || exception.message, 'error')
     }
   }
 
@@ -152,6 +141,7 @@ const App = () => {
   )
 
   const blog = match ? blogs.find(blog => blog.id === match.params.id) : null
+
   return (
     <Container>
       <div>
@@ -159,14 +149,8 @@ const App = () => {
           <Header user={user} handleLogout={handleLogout} />
         </div>
 
-        {notification && (
-          <Alert
-            style={{ marginTop: 10, marginBottom: 10 }}
-            severity={notification.type}
-          >
-            {notification.message}
-          </Alert>
-        )}
+        <Notification />
+
         <ErrorBoundary>
           <Routes>
             <Route
