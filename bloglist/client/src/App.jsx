@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useReducer } from 'react'
 import { Routes, Route, useNavigate, useMatch, Link } from 'react-router-dom'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
@@ -8,14 +8,16 @@ import Header from './components/Header'
 import { Container } from '@mui/material'
 import { TextField, Button, Alert } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
+import  notificationReducer  from './components/notificationContext'
+
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState('')
-
+  const [notification, dispatch] = useReducer(notificationReducer, null)
   const navigate = useNavigate()
   const match = useMatch('/blogs/:id')
 
@@ -32,6 +34,11 @@ const App = () => {
     }
   }, [])
 
+  const notify = (message,type = 'success') => {
+    dispatch({type:'SET', payload:{message, type}})
+    setTimeout(() => { dispatch({ type: 'CLEAR', payload: null })
+    }, 5000)
+  }
   const handleLogin = async event => {
     event.preventDefault()
     try {
@@ -42,15 +49,9 @@ const App = () => {
       setUsername('')
       setPassword('')
       navigate('/')
-      setNotification(`new welcome back ${user.name}`)
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
+      notify(`new welcome back ${user.name}`)
     } catch (exception) {
-      setNotification(exception.message)
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
+      notify(exception.response?.data?.error || exception.message, 'error')
     }
   }
 
@@ -95,34 +96,26 @@ const App = () => {
     try {
       const createdBlog = await blogService.create(newObject)
       setBlogs([...blogs, createdBlog])
-      setNotification(
-        `new blog is added ${createdBlog.title} by ${createdBlog.author}`
-      )
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
+      notify(`new blog is added ${createdBlog.title} by ${createdBlog.author}`)
       navigate('/')
     } catch (exception) {
-      setNotification(exception.message)
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
+      notify(exception.response?.data?.error || exception.message, 'error')
     }
   }
 
   const handleDelete = async blogId => {
+    console.log('handleDelete called with', blogId)
+    const blogToDelete = blogs.find(b => b.id === blogId)
+    console.log('found', blogToDelete)
     try {
-      setBlogs(blogs.filter(blog => blog.id !== blogId))
-      setNotification('Blog deleted successfully')
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
+      await blogService.deleteBlog(blogId)
+      console.log('deleted on server')
+      setBlogs(blogs.filter(b => b.id !== blogId))
+      notify(`blog ${blogToDelete.title} by ${blogToDelete.author} deleted`)
       navigate('/')
     } catch (exception) {
-      setNotification(exception.message)
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
+      console.log('error', exception)
+      notify(exception.response?.data?.error || exception.message, 'error')
     }
   }
 
@@ -133,6 +126,7 @@ const App = () => {
         blogToLike.likes
       )
       setBlogs(blogs.map(b => (b.id === blogToLike.id ? updatedBlog : b)))
+      navigate('/')
     } catch (error) {
       console.error('Error updating likes:', error)
     }
@@ -170,7 +164,7 @@ const App = () => {
             style={{ marginTop: 10, marginBottom: 10 }}
             severity={notification.type}
           >
-            {notification}
+            {notification.message}
           </Alert>
         )}
         <ErrorBoundary>

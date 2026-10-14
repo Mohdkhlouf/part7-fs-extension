@@ -4,7 +4,6 @@ import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 
-import blogService from '../services/blogs'
 
 const blogStyle = {
   paddingTop: 10,
@@ -22,7 +21,6 @@ const Blog = ({ blog, onDelete, onLike, user }) => {
   const handleRemove = async () => {
     try {
       if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-        await blogService.deleteBlog(blog.id)
         onDelete(blog.id)
       }
     } catch (error) {
