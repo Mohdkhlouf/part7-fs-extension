@@ -11,6 +11,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 import { useNotify } from './NotificationContext'
 import { useQuery, useMutation,useQueryClient } from '@tanstack/react-query'
 import { useUser } from './UserContext'
+import UsersPage from './components/UsersPage'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -169,6 +170,7 @@ const createNewBlog = newObject => {
     </div>
   )
 
+
   const blog = match ? blogs.find(blog => blog.id === match.params.id) : null
 
   return (
@@ -195,6 +197,7 @@ const createNewBlog = newObject => {
             />
 
             <Route path="/" element={blogsFrom()} />
+            <Route path="/users" element={<UsersPage />} />
             <Route path="/login" element={loginForm()} />
             {user ? (
               <Route

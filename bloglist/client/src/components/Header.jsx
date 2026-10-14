@@ -15,6 +15,9 @@ const Header = () => {
           <Button color="inherit" component={Link} to="/">
             Blogs
           </Button>
+          <Button color="inherit" component={Link} to="/users">
+            Users
+          </Button>
           {user && (<Button color="inherit" component={Link} to="/newblog">
             New Blog
           </Button>)}
