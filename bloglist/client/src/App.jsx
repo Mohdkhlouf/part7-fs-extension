@@ -9,19 +9,16 @@ import Notification from './components/Notification'
 import { Container, TextField, Button } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useNotify } from './NotificationContext'
+import { useQuery, useMutation,useQueryClient } from '@tanstack/react-query'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const notify = useNotify()
   const navigate = useNavigate()
   const match = useMatch('/blogs/:id')
-
-  useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs))
-  }, [])
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('NotesUserDataToken')
@@ -31,6 +28,37 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+
+  const result = useQuery({
+    queryKey: ['blogs'],
+    queryFn: blogService.getAll,
+  })
+
+
+
+const newBlogMutation = useMutation({
+  mutationFn: blogService.create,
+  onSuccess: createdBlog => {
+    queryClient.invalidateQueries({ queryKey: ['blogs'] })
+    notify(`new blog is added ${createdBlog.title} by ${createdBlog.author}`)
+    navigate('/')
+  },
+  onError: error => {
+    notify(error.response?.data?.error || error.message, 'error')
+  }
+  })
+
+if (result.isLoading) return <div>Loading...</div>
+
+if (result.isError) return <div>Error: {result.error.message}</div>
+
+
+const blogs = result.data
+
+const createNewBlog = newObject => {
+    newBlogMutation.mutate(newObject)
+}
 
   const handleLogin = async event => {
     event.preventDefault()
@@ -85,16 +113,7 @@ const App = () => {
     </form>
   )
 
-  const createNewBlog = async newObject => {
-    try {
-      const createdBlog = await blogService.create(newObject)
-      setBlogs([...blogs, createdBlog])
-      notify(`new blog is added ${createdBlog.title} by ${createdBlog.author}`)
-      navigate('/')
-    } catch (exception) {
-      notify(exception.response?.data?.error || exception.message, 'error')
-    }
-  }
+
 
   const handleDelete = async blogId => {
     const blogToDelete = blogs.find(b => b.id === blogId)
