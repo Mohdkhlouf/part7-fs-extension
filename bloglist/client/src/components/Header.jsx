@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import { AppBar, Toolbar, Button, Typography } from '@mui/material'
-const Header = ({ user, handleLogout }) => {
-  const padding = { marginRight: 10 }
+import { useUser } from '../UserContext'
+
+const Header = () => {
+  const { user, logout } = useUser()
+
   return (
     <div>
       <AppBar position="static">
@@ -10,15 +13,13 @@ const Header = ({ user, handleLogout }) => {
             Blog App
           </Typography>
           <Button color="inherit" component={Link} to="/">
-            {' '}
-            Blogs{' '}
+            Blogs
           </Button>
-          <Button color="inherit" component={Link} to="/newblog">
-            {' '}
-            New Blog{' '}
-          </Button>
+          {user && (<Button color="inherit" component={Link} to="/newblog">
+            New Blog
+          </Button>)}
           {user ? (
-            <Button color="inherit" onClick={handleLogout}>
+            <Button color="inherit" onClick={logout}>
               LogOut
             </Button>
           ) : (

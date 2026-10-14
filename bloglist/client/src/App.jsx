@@ -10,22 +10,21 @@ import { Container, TextField, Button } from '@mui/material'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useNotify } from './NotificationContext'
 import { useQuery, useMutation,useQueryClient } from '@tanstack/react-query'
+import { useUser } from './UserContext'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
   const notify = useNotify()
   const navigate = useNavigate()
   const match = useMatch('/blogs/:id')
   const queryClient = useQueryClient()
+  const { user, login, logout } = useUser()
 
   useEffect(() => {
-    const loggedInUser = window.localStorage.getItem('NotesUserDataToken')
+    const loggedInUser = window.localStorage.getItem('BlogsUserDataToken')
     if (loggedInUser) {
-      const user = JSON.parse(loggedInUser)
-      setUser(user)
-      blogService.setToken(user.token)
+      login(JSON.parse(loggedInUser))
     }
   }, [])
 
@@ -88,23 +87,21 @@ const createNewBlog = newObject => {
   const handleLogin = async event => {
     event.preventDefault()
     try {
-      const user = await loginService.login({ username, password })
-      window.localStorage.setItem('NotesUserDataToken', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
+      const loggedInUser = await loginService.login({ username, password })
+      login(loggedInUser)
       setUsername('')
       setPassword('')
       navigate('/')
-      notify(`welcome back ${user.name}`)
+      notify(`welcome back ${loggedInUser.name}`)
     } catch (exception) {
       notify(exception.response?.data?.error || exception.message, 'error')
     }
   }
 
   const handleLogout = () => {
-    window.localStorage.clear()
-    setUser(null)
-    blogService.setToken(null)
+    logout()
+    notify('logged out successfully')
+    navigate('/login')
   }
 
   const loginForm = () => (
@@ -178,7 +175,7 @@ const createNewBlog = newObject => {
     <Container>
       <div>
         <div>
-          <Header user={user} handleLogout={handleLogout} />
+          <Header />
         </div>
 
         <Notification />

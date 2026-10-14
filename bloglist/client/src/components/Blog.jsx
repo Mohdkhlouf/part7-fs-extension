@@ -2,6 +2,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
+import { useUser } from '../UserContext'
 
 const blogStyle = {
   paddingTop: 10,
@@ -9,7 +10,8 @@ const blogStyle = {
   marginBottom: 5
 }
 
-const Blog = ({ blog, onDelete, onLike, user }) => {
+const Blog = ({ blog, onDelete, onLike }) => {
+  const {user} = useUser()
   if (!blog) return null
 
   const showRemoveButton =
