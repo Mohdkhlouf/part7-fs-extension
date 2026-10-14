@@ -29,7 +29,6 @@ const App = () => {
     }
   }, [])
 
-
   const result = useQuery({
     queryKey: ['blogs'],
     queryFn: blogService.getAll,
@@ -47,6 +46,32 @@ const newBlogMutation = useMutation({
   onError: error => {
     notify(error.response?.data?.error || error.message, 'error')
   }
+  })
+
+
+  const deleteBlogMutation = useMutation({
+    mutationFn: blogService.deleteBlog,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      notify('blog deleted successfully')
+      navigate('/')
+    },
+    onError: error => {
+      notify(error.response?.data?.error || error.message, 'error')
+    }
+  })
+
+
+
+  const updateLikeMutation = useMutation({
+    mutationFn: blogToLike => blogService.updateLike(blogToLike.id,blogToLike.likes),
+    onSuccess: updatedBlog => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      notify(`you liked ${updatedBlog.title}`)
+    },
+    onError: error => {
+      notify(error.response?.data?.error || error.message, 'error')
+    }
   })
 
 if (result.isLoading) return <div>Loading...</div>
@@ -113,31 +138,19 @@ const createNewBlog = newObject => {
     </form>
   )
 
-
-
   const handleDelete = async blogId => {
-    const blogToDelete = blogs.find(b => b.id === blogId)
-    try {
-      await blogService.deleteBlog(blogId)
-      setBlogs(blogs.filter(b => b.id !== blogId))
-      notify(`blog ${blogToDelete.title} by ${blogToDelete.author} deleted`)
-      navigate('/')
-    } catch (exception) {
-      notify(exception.response?.data?.error || exception.message, 'error')
-    }
+    deleteBlogMutation.mutate(blogId)
   }
 
+
+
+
+
+
+
+
   const handleLike = async blogToLike => {
-    try {
-      const updatedBlog = await blogService.updateLike(
-        blogToLike.id,
-        blogToLike.likes
-      )
-      setBlogs(blogs.map(b => (b.id === blogToLike.id ? updatedBlog : b)))
-      notify(`you liked ${updatedBlog.title}`)
-    } catch (exception) {
-      notify(exception.response?.data?.error || exception.message, 'error')
-    }
+      updateLikeMutation.mutate(blogToLike)
   }
 
   const blogsFrom = () => (
