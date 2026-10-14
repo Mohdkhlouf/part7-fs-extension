@@ -2,7 +2,7 @@
 
 const notificationReducer = (state, action) => {
   switch (action.type) {
-    case 'STE':
+    case 'SET':
       return action.payload
     case 'CLEAR':
       return null
