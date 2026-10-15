@@ -13,6 +13,16 @@ import { useQuery, useMutation,useQueryClient } from '@tanstack/react-query'
 import { useUser } from './UserContext'
 import UsersPage from './components/UsersPage'
 import User from './components/User'
+import {
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from '@mui/material'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -154,20 +164,40 @@ const createNewBlog = newObject => {
 
   const blogsFrom = () => (
     <div>
-      <h2>blogs</h2>
-      <p>{user && user.name} logged in</p>
+      <Typography variant="h4" sx={{ mt: 2, mb: 1 }}>
+        Blogs
+      </Typography>
 
-      <ul>
-        {[...blogs]
-          .sort((a, b) => b.likes - a.likes)
-          .map(blog => (
-            <li key={blog.id}>
-              <Link to={`/blogs/${blog.id}`}>
-                {blog.title} by {blog.author}
-              </Link>
-            </li>
-          ))}
-      </ul>
+      {user && (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          {user.name} logged in
+        </Typography>
+      )}
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><b>Title</b></TableCell>
+              <TableCell><b>Author</b></TableCell>
+              <TableCell align="right"><b>Likes</b></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {[...blogs]
+              .sort((a, b) => b.likes - a.likes)
+              .map(blog => (
+                <TableRow key={blog.id} hover>
+                  <TableCell>
+                    <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                  </TableCell>
+                  <TableCell>{blog.author}</TableCell>
+                  <TableCell align="right">{blog.likes}</TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 
