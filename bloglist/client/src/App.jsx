@@ -14,18 +14,8 @@ import { useUser } from './UserContext'
 import UsersPage from './components/UsersPage'
 import User from './components/User'
 import persistentUser from './services/persistentUser'
+import { List, ListItem, ListItemButton, ListItemText, Paper, Typography } from '@mui/material'
 
-
-import {
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from '@mui/material'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -169,30 +159,22 @@ const createNewBlog = newObject => {
         </Typography>
       )}
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell><b>Title</b></TableCell>
-              <TableCell><b>Author</b></TableCell>
-              <TableCell align="right"><b>Likes</b></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {[...blogs]
-              .sort((a, b) => b.likes - a.likes)
-              .map(blog => (
-                <TableRow key={blog.id} hover>
-                  <TableCell>
-                    <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-                  </TableCell>
-                  <TableCell>{blog.author}</TableCell>
-                  <TableCell align="right">{blog.likes}</TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Paper>
+        <List>
+          {[...blogs]
+            .sort((a, b) => b.likes - a.likes)
+            .map(blog => (
+              <ListItem key={blog.id} disablePadding divider>
+                <ListItemButton component={Link} to={`/blogs/${blog.id}`}>
+                  <ListItemText
+                    primary={blog.title}
+                    secondary={`${blog.author} · ${blog.likes} likes`}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+        </List>
+      </Paper>
     </div>
   )
 
