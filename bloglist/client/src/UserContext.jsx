@@ -1,5 +1,6 @@
 import { createContext, useReducer, useContext } from 'react'
 import blogService from './services/blogs'
+import persistentUser from './services/persistentUser'
 
 const userReducer = (state, action) => {
   switch (action.type) {
@@ -18,13 +19,13 @@ export const UserContextProvider = ({ children }) => {
   const [user, dispatch] = useReducer(userReducer, null)
 
   const login = user => {
-    window.localStorage.setItem('BlogsUserDataToken', JSON.stringify(user))
+    persistentUser.saveUser(user)
     blogService.setToken(user.token)
     dispatch({ type: 'LOGIN', payload: user })
   }
 
   const logout = () => {
-    window.localStorage.removeItem('BlogsUserDataToken')
+    persistentUser.removeUser()
     blogService.setToken(null)
     dispatch({ type: 'LOGOUT' })
   }

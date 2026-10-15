@@ -33,6 +33,7 @@ const Blog = ({ blog, onDelete, onLike }) => {
   })
 
   if (!blog) return null
+  if (!blog.user) throw new Error(`blog ${blog.id} has no user`)
 
   const showRemoveButton =
     user && blog.user && user.username === blog.user.username
@@ -64,8 +65,7 @@ const Blog = ({ blog, onDelete, onLike }) => {
           <Typography variant="body2">{blog.url}</Typography>
 
           <Typography gutterBottom variant="body2">
-            {'Added by '}
-            {blog.user?.username}
+            Added by {blog.user.name}
           </Typography>
 
           <Typography variant="body2">

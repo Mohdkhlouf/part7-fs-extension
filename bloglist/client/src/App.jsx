@@ -13,6 +13,9 @@ import { useQuery, useMutation,useQueryClient } from '@tanstack/react-query'
 import { useUser } from './UserContext'
 import UsersPage from './components/UsersPage'
 import User from './components/User'
+import persistentUser from './services/persistentUser'
+
+
 import {
   Typography,
   Table,
@@ -31,13 +34,11 @@ const App = () => {
   const navigate = useNavigate()
   const match = useMatch('/blogs/:id')
   const queryClient = useQueryClient()
-  const { user, login, logout } = useUser()
+  const { user, login } = useUser()
 
   useEffect(() => {
-    const loggedInUser = window.localStorage.getItem('BlogsUserDataToken')
-    if (loggedInUser) {
-      login(JSON.parse(loggedInUser))
-    }
+    const saved = persistentUser.getUser()
+    if (saved) login(saved)
   }, [])
 
   const result = useQuery({
@@ -108,12 +109,6 @@ const createNewBlog = newObject => {
     } catch (exception) {
       notify(exception.response?.data?.error || exception.message, 'error')
     }
-  }
-
-  const handleLogout = () => {
-    logout()
-    notify('logged out successfully')
-    navigate('/login')
   }
 
   const loginForm = () => (

@@ -13,21 +13,21 @@ const Header = () => {
             Blog App
           </Typography>
           <Button color="inherit" component={Link} to="/">
-            Blogs
+            blogs
           </Button>
           <Button color="inherit" component={Link} to="/users">
-            Users
+            users
           </Button>
           {user && (<Button color="inherit" component={Link} to="/newblog">
             New Blog
           </Button>)}
           {user ? (
             <Button color="inherit" onClick={logout}>
-              LogOut
+              logout
             </Button>
           ) : (
             <Button color="inherit" component={Link} to="/login">
-              Login
+              login
             </Button>
           )}
         </Toolbar>
