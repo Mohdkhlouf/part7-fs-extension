@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Link } from 'react-router-dom'
 
 const UsersPage = () => {
   function createData(name, Username, blogsCounter) {
@@ -45,7 +46,9 @@ const UsersPage = () => {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {user.name}
+                      <Link to={`/users/${user.id}`}>
+                        {user.name}
+                      </Link>
                     </TableCell>
                     <TableCell >{user.username}</TableCell>
                     <TableCell >{user.blogs.length}</TableCell>

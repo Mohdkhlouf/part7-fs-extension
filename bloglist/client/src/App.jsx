@@ -12,6 +12,7 @@ import { useNotify } from './NotificationContext'
 import { useQuery, useMutation,useQueryClient } from '@tanstack/react-query'
 import { useUser } from './UserContext'
 import UsersPage from './components/UsersPage'
+import User from './components/User'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -196,6 +197,7 @@ const createNewBlog = newObject => {
               }
             />
 
+            <Route path="/users/:id"  element={<User/>} />
             <Route path="/" element={blogsFrom()} />
             <Route path="/users" element={<UsersPage />} />
             <Route path="/login" element={loginForm()} />
